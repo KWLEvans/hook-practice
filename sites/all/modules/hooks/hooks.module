@@ -1,0 +1,32 @@
+<?php
+
+function hooks_menu() {
+    $items = array();
+    $items['hooks'] = array(
+        'title' => 'Hooks!',
+        'page callback' => 'display_hooks',
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    $items['dumps'] = array(
+        'title' => 'Dumpz',
+        'page callback' => 'display_dumps',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+
+function hooks_user_login(&$edit, $account) {
+    $_SESSION['user_info'] = array($edit, $account);
+    $_GET['destination'] = 'dumps';
+}
+
+function display_hooks() {
+    return "hellow!";
+}
+
+function display_dumps() {
+    drupal_set_message("message?");
+    return "default content";
+}

@@ -1,0 +1,5 @@
+name = Hooks: the Module
+description = It'll do all kinds of things to your page when stuff happens.
+package = Practice Modules
+core = 7.x
+files[] = hooks.module
