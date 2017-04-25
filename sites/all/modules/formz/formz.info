@@ -1,0 +1,5 @@
+name = Formz
+description = Formz for putting at least one datum.
+package = Practice Modules
+core = 7.x
+files[] = formz.module

@@ -19,6 +19,12 @@ function hooks_menu() {
 
 function hooks_user_login(&$edit, $account) {
     $_SESSION['user_info'] = array($edit, $account);
+
+    if (array_intersect($account->roles, array('administrator'))) {
+        drupal_set_message("This worked?");
+    } else {
+        drupal_set_message("You is not adman.");
+    }
     $_GET['destination'] = 'dumps';
 }
 
@@ -27,6 +33,5 @@ function display_hooks() {
 }
 
 function display_dumps() {
-    drupal_set_message("message?");
     return "default content";
 }

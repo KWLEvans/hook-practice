@@ -1,0 +1,114 @@
+<?php
+function formz_menu() {
+    $items = array();
+    $items['formz'] = array(
+        'title' => 'Fills Out Thas Formz',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('formz_form'),
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    $items['dumps'] = array(
+        'title' => 'Here is dumps',
+        'page callback' => 'dump_node',
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    return $items;
+}
+
+function formz_form() {
+    $form['title'] = array(
+        '#title' => 'Title',
+        '#type' => 'textfield',
+        '#description' => t('Give it a name already.'),
+    );
+    $form['number'] = array(
+        '#title' => 'Number',
+        '#type' => 'textfield',
+        '#description' => t('Put numbers in.'),
+    );
+    $form['pitcher'] = array(
+        '#title' => 'Pitcher',
+        '#type' => 'file',
+        '#description' => 'Uploud the pichers!',
+    );
+    $form['body'] = array(
+        '#title' => 'Body',
+        '#type' => 'textfield',
+        '#description' => 'Dat body do.',
+    );
+    $form['choices'] = array(
+        '#title' => 'Choices',
+        '#type' => 'checkboxes',
+        '#options' => array(
+            1 => 'choice1',
+            2 => 'choice2',
+            3 => 'choice3',
+            4 => 'choice4',
+            5 => 'choice5',
+            6 => 'choice6',
+        ),
+        '#description' => 'Choose one.',
+    );
+    $form['words'] = array(
+        '#title' => 'Words',
+        '#type' => 'select',
+        '#options' => array(
+            1 => 'words1',
+            2 => 'words2',
+            3 => 'words3',
+            4 => 'words4',
+        ),
+        '#description' => 'Choose just one, though.',
+    );
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Gimme Dat',
+    );
+
+    return $form;
+}
+
+function formz_form_submit($form, &$form_state) {
+    drupal_set_message("<pre>".serialize($form_state['values'])."</pre>");
+    $values = array(
+        'title' => $form_state['values']['title'],
+        'number' => $form_state['values']['number'],
+        'pitcher' => $form_state['values']['pitcher'],
+        'body' => $form_state['values']['body'],
+        'choices' => $form_state['values']['choices'],
+        'words' => $form_state['values']['words'],
+    );
+
+    $datum = new stdClass();
+    $datum->type = 'datum';
+    node_object_prepare($datum);
+
+
+
+    // $datum->language = 'en';
+    $datum->title = $values['title'];
+    $datum->field_number['und'][0]['value'] = $values['number'];
+    $datum->field_pitcher['und'][0]['filename'] = $values['pitcher'];
+    $datum->body['und'][0]['value'] = $values['body'];
+    $datum->body['und'][0]['summary'] = 'hi';
+    $datum->body['und'][0]['format'] = 'filtered_html';
+    $datum->field_choices['und'][0]['value'] = $values['choices'];
+    $datum->field_words['und'][0]['value'] = $values['words'];
+
+    node_submit($datum);
+        //
+        // echo '<pre>';
+        // var_dump($datum);
+        // echo '</pre>';
+        // exit;
+    node_save($datum);
+
+}
+
+function dump_node() {
+    echo '<pre>';
+    var_dump(node_load(10));
+    echo '</pre>';
+}
